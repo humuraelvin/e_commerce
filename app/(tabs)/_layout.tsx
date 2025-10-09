@@ -90,7 +90,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-  );
+ );
 }
 
 const styles = StyleSheet.create({
