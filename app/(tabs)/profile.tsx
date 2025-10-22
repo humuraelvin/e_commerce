@@ -1,9 +1,16 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import React from 'react';
-import { Image, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useAuth } from '../../contexts/auth';
 
 export default function ProfileScreen() {
+  const { user, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
   return (
     <ThemedView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -14,8 +21,11 @@ export default function ProfileScreen() {
               style={styles.avatar}
             />
           </View>
-          <ThemedText style={styles.name}>John Doe</ThemedText>
-          <ThemedText style={styles.email}>john.doe@example.com</ThemedText>
+          <ThemedText style={styles.name}>{user?.name}</ThemedText>
+          <ThemedText style={styles.email}>{user?.email}</ThemedText>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <ThemedText style={styles.logoutText}>Logout</ThemedText>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.section}>
@@ -59,6 +69,18 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  logoutButton: {
+    backgroundColor: '#ff3b30',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  logoutText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   scrollView: {
     flex: 1,

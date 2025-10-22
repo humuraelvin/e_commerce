@@ -7,6 +7,8 @@ import { Drawer } from 'expo-router/drawer';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { AuthProtection } from '../components/auth-protection';
+import { AuthProvider } from '../contexts/auth';
 
 // Add Reanimated's babel plugin to babel.config.js:
 // plugins: ['react-native-reanimated/plugin']
@@ -15,10 +17,12 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <CartProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Drawer
+    <AuthProvider>
+      <AuthProtection>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <CartProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <Drawer
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             screenOptions={{
               headerStyle: {
@@ -46,10 +50,19 @@ export default function RootLayout() {
                 drawerItemStyle: { display: 'none' },
               }}
             />
+            <Drawer.Screen
+              name="(auth)"
+              options={{
+                title: 'Authentication',
+                drawerItemStyle: { display: 'none' },
+              }}
+            />
           </Drawer>
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
         </ThemeProvider>
       </CartProvider>
     </GestureHandlerRootView>
+      </AuthProtection>
+    </AuthProvider>
   );
 }
