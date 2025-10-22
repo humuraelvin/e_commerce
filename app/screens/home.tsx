@@ -22,7 +22,7 @@ export default function HomeScreen() {
         <View style={styles.buttonContainer}>
           <Button
             title="Shop Now"
-            onPress={() => router.push('/(tabs)/products')}
+            onPress={() => router.push('/products')}
             color={primaryColor}
           />
         </View>

@@ -1,70 +1,105 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useColorScheme } from 'react-native';
+import { C      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ size, color }) => (
+            <IconSymbol name="gearshape" size={size} color={color} />
+          ),
+        }}
+      />
+    </Tabs>
+  );
+}from '../../constants/theme';
+import { IconSymbol } from '../../components/ui/icon-symbol';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useCart } from '@/hooks/use-cart';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export default function TabLayout() {
   const colorScheme = useColorScheme();
-
-  function CartTabIcon({ color }: { color: string }) {
-    const { items } = useCart();
-    return (
-      <View>
-        <IconSymbol size={28} name="cart.fill" color={color} />
-        {items.length > 0 && (
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>{items.length}</Text>
-          </View>
-        )}
-      </View>
-    );
-  }
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: true,
-        headerStyle: {
+        headerShown: false,
+
+        tabBarStyle: {
+
           backgroundColor: Colors[colorScheme ?? 'light'].background,
         },
-        headerTintColor: Colors[colorScheme ?? 'light'].text,
-        tabBarButton: HapticTab,
-        tabBarStyle: {
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
-        },
-      }}>
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].text,
+      }}
+    >
       <Tabs.Screen
         name="home"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="house.fill" color={color} />,
+          tabBarIcon: ({ size, color }) => (
+            <IconSymbol name="house" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="products"
         options={{
           title: 'Products',
-          tabBarIcon: ({ color }) => <IconSymbol size={24} name="bag.fill" color={color} />,
+          tabBarIcon: ({ size, color }) => (
+            <IconSymbol name="bag" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="cart"
         options={{
           title: 'Cart',
-          tabBarIcon: ({ color }: { color: string }) => <CartTabIcon color={color} />,
+          tabBarIcon: ({ size, color }) => (
+            <IconSymbol name="cart" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
+          title: 'Profile',
+          tabBarIcon: ({ size, color }) => (
+            <IconSymbol name="person.circle" size={size} color={color} />
+          ),
+        }}
+      />
+
+          tabBarIcon: ({ size, color }) => (      <Tabs.Screen
+
+            <IconSymbol name="person.circle" size={size} color={color} />        name="products"
+
+          ),        options={{
+
+        }}          title: 'Products',
+
+      />          tabBarIcon: ({ color }) => <IconSymbol size={24} name="bag.fill" color={color} />,
+
+      <Tabs.Screen        }}
+
+        name="settings"      />
+
+        options={{      <Tabs.Screen
+
+          title: 'Settings',        name="cart"
+
+          tabBarIcon: ({ size, color }) => (        options={{
+
+            <IconSymbol name="gearshape" size={size} color={color} />          title: 'Cart',
+
+          ),          tabBarIcon: ({ color }: { color: string }) => <CartTabIcon color={color} />,
+
+        }}        }}
+
+      />      />
+
+    </Tabs>      <Tabs.Screen
+
+  );        name="profile"
+
+}        options={{
           title: 'Profile',
           tabBarIcon: ({ color }: { color: string }) => <IconSymbol size={24} name="person.crop.circle" color={color} />,
         }}
