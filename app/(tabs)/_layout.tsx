@@ -1,7 +1,6 @@
-import { DrawerActions } from '@react-navigation/native';
-import { Tabs, useNavigation } from 'expo-router';
+import { Tabs } from 'expo-router';
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
@@ -11,17 +10,6 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const navigation = useNavigation();
-
-  function HeaderLeft() {
-    return (
-      <Pressable 
-        style={styles.headerButton}
-        onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-        <IconSymbol name="line.3.horizontal" size={24} color={Colors[colorScheme ?? 'light'].text} />
-      </Pressable>
-    );
-  }
 
   function CartTabIcon({ color }: { color: string }) {
     const { items } = useCart();
@@ -46,7 +34,6 @@ export default function TabLayout() {
           backgroundColor: Colors[colorScheme ?? 'light'].background,
         },
         headerTintColor: Colors[colorScheme ?? 'light'].text,
-        headerLeft: () => <HeaderLeft />,
         tabBarButton: HapticTab,
         tabBarStyle: {
           height: 60,
@@ -94,10 +81,6 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  headerButton: {
-    marginLeft: 16,
-    padding: 8,
-  },
   badge: {
     position: 'absolute',
     right: -6,

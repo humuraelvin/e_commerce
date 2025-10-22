@@ -84,11 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       // Store updated users list
       await AsyncStorage.setItem('@users', JSON.stringify([...users, newUser]));
       
-      // Store current user data without password
-      const { password: _, ...userData } = newUser;
-      await AsyncStorage.setItem('@user', JSON.stringify(userData));
-      setUser(userData);
-      
+      // Don't automatically log in the user after registration
       return true;
     } catch (error) {
       console.error('Error signing up:', error);

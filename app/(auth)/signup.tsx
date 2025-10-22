@@ -32,7 +32,9 @@ export default function Signup() {
 
     const success = await signUp(email, password, name);
     if (success) {
-      router.replace('/(tabs)/home');
+      // Show success message and redirect to login
+      alert('Registration successful! Please login with your credentials.');
+      router.push('/login');
     } else {
       setError('Email already exists');
     }
