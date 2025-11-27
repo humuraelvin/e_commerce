@@ -5,6 +5,7 @@ interface User {
   id: string;
   email: string;
   name: string;
+  created_at?: string;
 }
 
 interface AuthContextType {
@@ -17,23 +18,34 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+const API_URL = 'http://localhost:4000/api';
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for stored user data when the app loads
     loadUser();
   }, []);
 
   const loadUser = async () => {
     try {
-      const storedUser = await AsyncStorage.getItem('@user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+      const token = await AsyncStorage.getItem('@token');
+      if (token) {
+        // Fetch user profile
+        const res = await fetch(`${API_URL}/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.ok) {
+          const userData = await res.json();
+          setUser(userData);
+        } else {
+          setUser(null);
+          await AsyncStorage.removeItem('@token');
+        }
       }
     } catch (error) {
-      console.error('Error loading user:', error);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -41,64 +53,50 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string): Promise<boolean> => {
     try {
-      // Get stored users
-      const usersStr = await AsyncStorage.getItem('@users');
-      const users: Array<User & { password: string }> = usersStr ? JSON.parse(usersStr) : [];
-      
-      // Find user with matching credentials
-      const user = users.find(u => u.email === email && u.password === password);
-      
-      if (user) {
-        // Store user data without password
-        const { password: _, ...userData } = user;
-        await AsyncStorage.setItem('@user', JSON.stringify(userData));
-        setUser(userData);
-        return true;
-      }
-      return false;
+      const res = await fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) return false;
+      const data = await res.json();
+      await AsyncStorage.setItem('@token', data.token);
+      // Fetch user profile
+      const profileRes = await fetch(`${API_URL}/me`, {
+        headers: { Authorization: `Bearer ${data.token}` },
+      });
+      if (!profileRes.ok) return false;
+      const userData = await profileRes.json();
+      setUser(userData);
+      return true;
     } catch (error) {
-      console.error('Error signing in:', error);
       return false;
     }
   };
 
   const signUp = async (email: string, password: string, name: string): Promise<boolean> => {
     try {
-      // Get stored users
-      const usersStr = await AsyncStorage.getItem('@users');
-      const users: Array<User & { password: string }> = usersStr ? JSON.parse(usersStr) : [];
-      
-      // Check if email already exists
-      if (users.some(u => u.email === email)) {
+      const res = await fetch(`${API_URL}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name }),
+      });
+      const data = await res.json();
+      console.log('Signup response:', { status: res.status, data });
+      if (!res.ok) {
+        console.error('Signup failed:', data.error);
         return false;
       }
-      
-      // Create new user
-      const newUser = {
-        id: Date.now().toString(),
-        email,
-        password,
-        name,
-      };
-      
-      // Store updated users list
-      await AsyncStorage.setItem('@users', JSON.stringify([...users, newUser]));
-      
-      // Don't automatically log in the user after registration
       return true;
     } catch (error) {
-      console.error('Error signing up:', error);
+      console.error('Signup error:', error);
       return false;
     }
   };
 
   const signOut = async () => {
-    try {
-      await AsyncStorage.removeItem('@user');
-      setUser(null);
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
+    await AsyncStorage.removeItem('@token');
+    setUser(null);
   };
 
   return (

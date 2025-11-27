@@ -1,35 +1,24 @@
 import { Tabs } from 'expo-router';
-import { useColorScheme } from 'react-native';
-import { C      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ size, color }) => (
-            <IconSymbol name="gearshape" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
-  );
-}from '../../constants/theme';
+import React from 'react';
+import { StyleSheet, useColorScheme } from 'react-native';
 import { IconSymbol } from '../../components/ui/icon-symbol';
+import { Colors } from '../../constants/theme';
 
+export default function TabsLayout() {
   const colorScheme = useColorScheme();
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-
         tabBarStyle: {
-
           backgroundColor: Colors[colorScheme ?? 'light'].background,
         },
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         tabBarInactiveTintColor: Colors[colorScheme ?? 'light'].text,
       }}
     >
+      {/* Home */}
       <Tabs.Screen
         name="home"
         options={{
@@ -39,82 +28,55 @@ import { IconSymbol } from '../../components/ui/icon-symbol';
           ),
         }}
       />
+
+      {/* Products */}
       <Tabs.Screen
         name="products"
         options={{
           title: 'Products',
           tabBarIcon: ({ size, color }) => (
-            <IconSymbol name="bag" size={size} color={color} />
+            <IconSymbol name="cart" size={size} color={color} />
           ),
         }}
       />
+
+      {/* Cart */}
       <Tabs.Screen
         name="cart"
         options={{
           title: 'Cart',
           tabBarIcon: ({ size, color }) => (
-            <IconSymbol name="cart" size={size} color={color} />
+            <IconSymbol name="bag" size={size} color={color} />
           ),
         }}
       />
+
+      {/* Profile */}
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
           tabBarIcon: ({ size, color }) => (
-            <IconSymbol name="person.circle" size={size} color={color} />
+            <IconSymbol name="person" size={size} color={color} />
           ),
         }}
       />
 
-          tabBarIcon: ({ size, color }) => (      <Tabs.Screen
-
-            <IconSymbol name="person.circle" size={size} color={color} />        name="products"
-
-          ),        options={{
-
-        }}          title: 'Products',
-
-      />          tabBarIcon: ({ color }) => <IconSymbol size={24} name="bag.fill" color={color} />,
-
-      <Tabs.Screen        }}
-
-        name="settings"      />
-
-        options={{      <Tabs.Screen
-
-          title: 'Settings',        name="cart"
-
-          tabBarIcon: ({ size, color }) => (        options={{
-
-            <IconSymbol name="gearshape" size={size} color={color} />          title: 'Cart',
-
-          ),          tabBarIcon: ({ color }: { color: string }) => <CartTabIcon color={color} />,
-
-        }}        }}
-
-      />      />
-
-    </Tabs>      <Tabs.Screen
-
-  );        name="profile"
-
-}        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color }: { color: string }) => <IconSymbol size={24} name="person.crop.circle" color={color} />,
-        }}
-      />
+      {/* Settings */}
       <Tabs.Screen
         name="settings"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color }: { color: string }) => <IconSymbol size={24} name="gear" color={color} />,
+          tabBarIcon: ({ size, color }) => (
+            <IconSymbol name="gear" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>
- );
+  );
 }
 
+// Optional badge style (if needed in the future)
 const styles = StyleSheet.create({
   badge: {
     position: 'absolute',

@@ -22,11 +22,8 @@ function CustomDrawerContent(props: DrawerContentComponentProps) {
 
   // Define the main navigation routes
   const mainRoutes = [
-    { name: '(tabs)/home', label: 'Home', icon: 'house' as const },
-    { name: '(tabs)/products', label: 'Products', icon: 'bag' as const },
-    { name: '(tabs)/cart', label: 'Cart', icon: 'cart' as const },
-    { name: '(tabs)/profile', label: 'Profile', icon: 'person.circle' as const },
-    { name: '(tabs)/settings', label: 'Settings', icon: 'gearshape' as const },
+    { name: 'login', label: 'Login', icon: 'person.circle' as const },
+    { name: 'signup', label: 'Sign Up', icon: 'person.badge.plus' as const },
   ];
 
   return (
@@ -148,8 +145,6 @@ export default function RootLayout() {
                   drawerItemStyle: { display: 'none' },
                 }}
               />
-
-              {/* Hidden Screens */}
               <Drawer.Screen
                 name="login"
                 options={{
